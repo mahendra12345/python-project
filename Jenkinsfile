@@ -12,7 +12,7 @@ pipeline {
 
         stage('Create Virtual Environment') {
             steps {
-                bat 'python -m venv venv'
+                bat 'py -m venv venv'
             }
         }
 
@@ -24,19 +24,19 @@ pipeline {
 
         stage('Check Django') {
             steps {
-                bat 'venv\\Scripts\\python manage.py check'
+                bat 'venv\\Scripts\\py manage.py check'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'venv\\Scripts\\python manage.py test'
+                bat 'venv\\Scripts\\py manage.py test'
             }
         }
 
         stage('Collect Static') {
             steps {
-                bat 'venv\\Scripts\\python manage.py collectstatic --noinput'
+                bat 'venv\\Scripts\\py manage.py collectstatic --noinput'
             }
         }
 
