@@ -4,39 +4,51 @@ pipeline {
 
     stages {
 
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/username/project.git'
             }
         }
 
         stage('Create Virtual Environment') {
             steps {
-                bat 'py -m venv venv'
+                bat 'python -m venv venv'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'venv\\Scripts\\pip install -r requirements.txt'
+                bat '''
+                call venv\\Scripts\\activate
+                pip install -r requirements.txt
+                '''
             }
         }
 
-        stage('Check Django') {
+        stage('Run Migrations') {
             steps {
-                bat 'venv\\Scripts\\py manage.py check'
+                bat '''
+                call venv\\Scripts\\activate
+                python manage.py migrate
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'venv\\Scripts\\py manage.py test'
+                bat '''
+                call venv\\Scripts\\activate
+                python manage.py test
+                '''
             }
         }
 
         stage('Collect Static') {
             steps {
-                bat 'venv\\Scripts\\py manage.py collectstatic --noinput'
+                bat '''
+                call venv\\Scripts\\activate
+                python manage.py collectstatic --noinput
+                '''
             }
         }
 
